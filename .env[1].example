@@ -1,0 +1,4 @@
+PORT=3000
+JWT_SECRET=CHANGE_ME_TO_A_LONG_RANDOM_SECRET
+ADMIN_EMAIL=admin@example.com
+# Never put private payment credentials in the frontend.
