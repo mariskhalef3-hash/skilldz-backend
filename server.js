@@ -340,7 +340,42 @@ app.get(
     });
   }
 );
+/* =========================
+   TEST ACCESS — TEMPORARY
+========================= */
 
+app.post("/api/test-access", auth, (req, res) => {
+  if (
+    !process.env.TEST_ACCESS_KEY ||
+    req.headers["x-test-access-key"] !== process.env.TEST_ACCESS_KEY
+  ) {
+    return res.status(403).json({
+      error: "Accès de test refusé."
+    });
+  }
+
+  const courseId = Number(req.body?.course_id);
+
+  const course = db
+    .prepare("SELECT id FROM courses WHERE id = ?")
+    .get(courseId);
+
+  if (!course) {
+    return res.status(404).json({
+      error: "Formation introuvable."
+    });
+  }
+
+  db.prepare(`
+    INSERT OR IGNORE INTO enrollments (user_id, course_id)
+    VALUES (?, ?)
+  `).run(req.user.id, courseId);
+
+  res.json({
+    ok: true,
+    message: "Accès de test activé."
+  });
+});
 /* =========================
    PAYMENT WEBHOOK
 ========================= */
