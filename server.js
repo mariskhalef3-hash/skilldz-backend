@@ -1,4 +1,4 @@
-import "dotenv/config";
+"import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS users(
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'user',
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
